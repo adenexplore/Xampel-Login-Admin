@@ -135,6 +135,12 @@
 </head>
 
 <body>
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
     <div class="d-flex flex-column justify-content-center w-100 h-100">
         <div class="d-flex flex-column justify-content-center align-items-center">
             <div class="kotak_login">
@@ -153,6 +159,10 @@
                             <p id="togglePassword" class="fas fa-eye"></p>
                         </div>
                         <button type="submit" class="tombol_login">Login</button>
+                        <div class="forgot-password">
+    <a href="/forgot-password">Forgot Password?</a>
+</div>
+
                     </div>
                 </form>
 

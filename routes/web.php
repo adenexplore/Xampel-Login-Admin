@@ -22,6 +22,12 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'login']);
 Route::post('/postlogin', [AuthController::class, 'postlogin']);
 Route::get('/logout', [AuthController::class, 'logout']);
+Route::view('/forgot-password', 'auth.forgot-password');
+
+// Forgot Password Routes
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink']);
+Route::get('/reset-password', [AuthController::class, 'showResetForm']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/dashboard', function () {
