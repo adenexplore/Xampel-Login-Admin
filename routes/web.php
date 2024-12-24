@@ -28,6 +28,10 @@ Route::view('/forgot-password', 'auth.forgot-password');
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink']);
 Route::get('/reset-password', [AuthController::class, 'showResetForm']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+Route::get('/success', function () {
+    return view('auth.success');
+})->name('success-page');
+
 
 Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/dashboard', function () {

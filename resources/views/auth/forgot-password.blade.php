@@ -83,29 +83,72 @@
         }
 
         .alert.success {
-            background-color: #d4edda;
-            color: #155724;
+            .alert {
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid transparent;
+            border-radius: 4px;
         }
-
-        .alert.error {
-            background-color: #f8d7da;
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .alert-danger {
             color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
         }
     </style>
 </head>
 <body>
+    <!-- Tampilkan Pesan Sukses -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- Tampilkan Pesan Error -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <div class="forgot-password-container">
-        <h1>Forgot Password</h1>
-        <form action="/forgot-password" method="POST">
+    <h1>Forgot Password</h1>
+    <form action="/forgot-password" method="POST" id="forgotPasswordForm">
         @csrf
         <div class="form-group">
             <label for="email">Enter your email:</label>
             <input type="email" name="email" id="email" required>
-            </div>
-            <button type="submit" class="btn-submit">Send Reset Link</button>
-        
+        </div>
+        <button type="submit" class="btn-submit">Send Reset Link</button>
     </form>
-        <div id="alertMessage" class="alert"></div>
-    </div>
+</div>
+
+<!-- Script untuk SweetAlert2 -->
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+    @if (session('success'))
+        Swal.fire({
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/login'; // Redirect ke halaman login
+            }
+        });
+    @endif
+});
+
+</script>
+
 </body>
 </html>

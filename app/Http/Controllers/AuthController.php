@@ -39,7 +39,7 @@ class AuthController extends Controller
     $user = DB::table('users')->where('email', $request->email)->first();
 
     if (!$user) {
-        return back()->withErrors(['email' => 'Email not found']);
+        return redirect('/forgot-password')->withErrors(['email' => 'Email tidak terdaftar. Silakan gunakan email yang valid.']);
     }
 
     $token = Str::random(64);
@@ -51,14 +51,21 @@ class AuthController extends Controller
 
     $link = url('/reset-password?token=' . $token . '&email=' . $request->email);
 
-    // Kirim email ke pengguna
-    Mail::send('emails.reset-password', ['link' => $link], function ($message) use ($request) {
-        $message->to($request->email);
-        $message->subject('Password Reset Link');
-    });
+    try {
+        // Kirim email ke pengguna
+        Mail::send('emails.reset-password', ['link' => $link], function ($message) use ($request) {
+            $message->to($request->email);
+            $message->subject('Password Reset Link');
+        });
 
-    return back()->with('success', 'Reset link sent to your email.');
+        // Redirect ke halaman forgot-password dengan pesan sukses di session
+        return redirect('/forgot-password')->with('success', 'Email reset password berhasil dikirim. Silakan cek email Anda.');
+    } catch (\Exception $e) {
+        return redirect('/forgot-password')->withErrors(['email' => 'Gagal mengirim email. Silakan coba lagi nanti.']);
+    }
 }
+
+
 
 public function showResetForm(Request $request)
 {
