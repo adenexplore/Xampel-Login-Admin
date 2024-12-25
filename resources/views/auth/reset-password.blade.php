@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         /* General styling */
         body {
@@ -73,25 +78,85 @@
         .btn-submit:hover {
             background-color: #0056b3;
         }
+
     </style>
 </head>
+
 <body>
-    <div class="reset-password-container">
-        <h1>Reset Password</h1>
+    <div class="reset-password-container" style="max-width: 400px;">
+        <center><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gdNrKPyr4qIaNuam3hHx6AUZorfCJlUeKQ&s"
+                alt="" width="30%"></center>
+        <br>
+        <h3 class="text-center mb-4">Reset Password</h3>
         <form action="/reset-password" method="POST">
             @csrf
+            <!-- Token -->
             <input type="hidden" name="token" value="{{ request('token') }}">
             <input type="hidden" name="email" value="{{ request('email') }}">
-            <div class="form-group">
-                <label for="password">New Password:</label>
-                <input type="password" name="password" id="password" placeholder="Enter new password" required>
+
+            <!-- New Password -->
+            <div class="mb-3">
+                <label for="password" class="form-label">New Password:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                    <input type="password" name="password" id="password" class="form-control"
+                        placeholder="Enter new password" required>
+                    <button type="button" class="btn btn-outline-secondary toggle-password" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="password_confirmation">Confirm Password:</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm your password" required>
+
+            <!-- Confirm Password -->
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Confirm Password:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
+                        placeholder="Confirm your password" required>
+                    <button type="button" class="btn btn-outline-secondary toggle-password" id="toggleConfirmPassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
             </div>
-            <button type="submit" class="btn-submit">Reset Password</button>
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+            <div class="text-end mt-2">
+                <a href="/login">Sudah Reset Password !</a>
+            </div>
         </form>
     </div>
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(function (toggleButton) {
+            toggleButton.addEventListener('click', function () {
+                const input = this.previousElementSibling; // Input di sebelah kiri tombol
+                const icon = this.querySelector('i'); // Ikon mata
+
+                // Toggle tipe input antara "password" dan "text"
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+            });
+        });
+
+    </script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -18,17 +18,18 @@ class AuthController extends Controller
 
     public function postlogin(Request $request)
     {
-        $cre = $request->only('email','password');
+        $cre = $request->only('email', 'password');
         if (Auth::attempt($cre)) {
-            return redirect('/dashboard');
+            return redirect('/dashboard')->with('success', 'Login Berhasil!');
         }
-        return redirect()->back()->with('sukses','Email atau Password Salah!');
+        return redirect()->back()->with('error', 'Email atau Password Salah!');
     }
-
+    
+    
     public function logout()
     {
         Auth::logout();
-        return redirect('/login');
+        return redirect('/login')->with('success', 'Logout berhasil!');
     }
 
 

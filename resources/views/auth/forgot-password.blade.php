@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,71 +88,73 @@
 
         .alert.success {
             .alert {
-            padding: 15px;
-            margin: 15px 0;
-            border: 1px solid transparent;
-            border-radius: 4px;
+                padding: 15px;
+                margin: 15px 0;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+
+            .alert-success {
+                color: #155724;
+                background-color: #d4edda;
+                border-color: #c3e6cb;
+            }
+
+            .alert-danger {
+                color: #721c24;
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+            }
+
         }
-        .alert-success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-        }
-        .alert-danger {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
+
     </style>
 </head>
+
 <body>
     <!-- Tampilkan Pesan Sukses -->
     @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
     @endif
 
     <!-- Tampilkan Pesan Error -->
     @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <p>{{ $error }}</p>
-            @endforeach
-        </div>
+    <div class="alert alert-danger">
+        @foreach ($errors->all() as $error)
+        <p>{{ $error }}</p>
+        @endforeach
+    </div>
     @endif
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <div class="forgot-password-container">
-    <h1>Forgot Password</h1>
-    <form action="/forgot-password" method="POST" id="forgotPasswordForm">
-        @csrf
-        <div class="form-group">
-            <label for="email">Enter your email:</label>
-            <input type="email" name="email" id="email" required>
-        </div>
-        <button type="submit" class="btn-submit">Send Reset Link</button>
-    </form>
-</div>
+        <center><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gdNrKPyr4qIaNuam3hHx6AUZorfCJlUeKQ&s"
+                alt="" width="30%"></center>
+        <br>
+        <h1>Forgot Password</h1>
+        <form action="/forgot-password" method="POST" id="forgotPasswordForm">
+            @csrf
+            <div class="form-group">
+                <label for="email" class="sr-only">Masukkan Email Anda:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-envelope"></i> <!-- Ikon email -->
+                        </span>
+                    </div>
+                    <input type="email" name="email" id="email" class="form-control"
+                        placeholder="Masukkan email yang terdaftar" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
+            <div class="text-end mt-2 ">
+                <a href="/login">Sudah Forgot Password !</a>
+            </div>
+        </form>
 
-<!-- Script untuk SweetAlert2 -->
-<script>
-   document.addEventListener('DOMContentLoaded', function () {
-    @if (session('success'))
-        Swal.fire({
-            title: 'Success!',
-            text: '{{ session('success') }}',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/login'; // Redirect ke halaman login
-            }
-        });
-    @endif
-});
-
-</script>
-
+    </div>
 </body>
+
 </html>

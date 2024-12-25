@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <title>Aplikasi</title>
     <link rel="icon" href="{{ asset('adminlte/img/iconlg.png') }}" type="image/gif" sizes="16x16">
     <style>
@@ -57,7 +59,8 @@
         }
 
         .tombol_login {
-            background: #C40C0C;
+            background: linear-gradient(to right, #87CEFA, #0000FF);
+            /* Gradien biru muda ke biru tua */
             color: white;
             font-size: 11pt;
             width: 100%;
@@ -70,99 +73,92 @@
         }
 
         .tombol_login[type="submit"]:hover {
-            background: #FF0000;
-        }
-
-        .password-container {
-            position: relative;
-        }
-
-        #password {
-            width: 100%;
-        }
-
-        #togglePassword {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 1.2em;
-        }
-
-        .login-container {
-            width: 300px;
-            /* adjust as needed */
-            margin: 0 auto;
-        }
-
-        .input-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .input-container i {
-            position: absolute;
-            top: 50%;
-            left: 10px;
-            transform: translateY(-50%);
-            color: #aaa;
-            /* adjust color as needed */
-        }
-
-        .input-container input {
-            padding-left: 30px;
-            /* adjust padding to make room for the icon */
-        }
-
-        .email-container i {
-            left: 10px;
-            /* position icon for email input */
-        }
-
-        .password-container i {
-            left: 10px;
-            /* position icon for password input */
-            right: 10px;
-            /* position eye icon for password input */
-        }
-
-        .password-container .fa-eye {
-            cursor: pointer;
+            background: blue;
+            font-size: 20px;
         }
 
     </style>
 </head>
 
 <body>
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('error'))
+    <script>
+        Swal.fire({
+            title: 'Gagal!',
+            text: '{{ session('
+            error ') }}',
+            icon: 'error',
+            confirmButtonText: 'Coba Lagi'
+        });
+
+    </script>
+    @endif
+
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            title: 'Berhasil!',
+            text: '{{ session('
+            success ') }}', 
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+
+    </script>
+    @endif
 
     <div class="d-flex flex-column justify-content-center w-100 h-100">
         <div class="d-flex flex-column justify-content-center align-items-center">
             <div class="kotak_login">
+                <center><img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gdNrKPyr4qIaNuam3hHx6AUZorfCJlUeKQ&s"
+                        alt="" width="30%"></center>
+                <br>
+                <div class="text-center">
+                    <h3>Login</h3>
+                </div>
                 <form action="postlogin" method="POST">
                     @csrf
-                    <div class="login-container">
-                        <div class="input-container email-container">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" name="email" class="form_login" placeholder="name@gmail.com" required>
+                    <div class="container mt-5" style="max-width: 400px;">
+                        <!-- Input Email -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                                <input type="email" name="email" class="form-control" placeholder="name@gmail.com"
+                                    required>
+                            </div>
                         </div>
-                        <div class="input-container password-container">
-                            <i class="fas fa-lock"></i>
-                            <input id="password" type="password" name="password" class="form_login"
-                                placeholder="password" required>
 
-                            <p id="togglePassword" class="fas fa-eye"></p>
+                        <!-- Input Password -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </div>
+                                <input id="password" type="password" name="password" class="form-control"
+                                    placeholder="password" required>
+                                <div class="input-group-append">
+                                    <span id="togglePassword" class="input-group-text" style="cursor: pointer;">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <button type="submit" class="tombol_login">Login</button>
-                        <div class="forgot-password">
-    <a href="/forgot-password">Forgot Password?</a>
-</div>
 
+                        <!-- Button Login -->
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+
+                        <!-- Forgot Password -->
+                        <div class="text-end mt-2">
+                            <a href="/forgot-password" class="text-decoration-none">Forgot Password?</a>
+                        </div>
                     </div>
                 </form>
 
@@ -170,10 +166,11 @@
         </div>
     </div>
 
+    <!-- Script -->
     <script>
         document.getElementById("togglePassword").addEventListener("click", function () {
             var passwordInput = document.getElementById("password");
-            var toggleIcon = document.getElementById("togglePassword");
+            var toggleIcon = this.querySelector("i");
 
             if (passwordInput.type === "password") {
                 passwordInput.type = "text";
