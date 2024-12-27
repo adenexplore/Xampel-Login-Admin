@@ -11,16 +11,31 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         /* General styling */
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
             height: 100vh;
         }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
 
         .reset-password-container {
             background-color: #ffffff;
@@ -83,56 +98,62 @@
 </head>
 
 <body>
-    <div class="reset-password-container" style="max-width: 400px;">
-        <center><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gdNrKPyr4qIaNuam3hHx6AUZorfCJlUeKQ&s"
-                alt="" width="30%"></center>
-        <br>
-        <h3 class="text-center mb-4">Reset Password</h3>
-        <form action="/reset-password" method="POST">
-            @csrf
-            <!-- Token -->
-            <input type="hidden" name="token" value="{{ request('token') }}">
-            <input type="hidden" name="email" value="{{ request('email') }}">
+    <div class="d-flex flex-column justify-content-center w-100 h-100">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div class="reset-password-container" style="max-width: 400px;">
+                <center><img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gdNrKPyr4qIaNuam3hHx6AUZorfCJlUeKQ&s"
+                        alt="" width="30%"></center>
+                <br>
+                <h3 class="text-center mb-4">Reset Password</h3>
+                <form action="/reset-password" method="POST">
+                    @csrf
+                    <!-- Token -->
+                    <input type="hidden" name="token" value="{{ request('token') }}">
+                    <input type="hidden" name="email" value="{{ request('email') }}">
 
-            <!-- New Password -->
-            <div class="mb-3">
-                <label for="password" class="form-label">New Password:</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </span>
+                    <!-- New Password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">New Password:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
+                            <input type="password" name="password" id="password" class="form-control"
+                                placeholder="Enter new password" required>
+                            <button type="button" class="btn btn-outline-secondary toggle-password" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
-                    <input type="password" name="password" id="password" class="form-control"
-                        placeholder="Enter new password" required>
-                    <button type="button" class="btn btn-outline-secondary toggle-password" id="togglePassword">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
 
-            <!-- Confirm Password -->
-            <div class="mb-3">
-                <label for="password_confirmation" class="form-label">Confirm Password:</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </span>
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        <label for="password_confirmation" class="form-label">Confirm Password:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
+                            <input type="password" name="password_confirmation" id="password_confirmation"
+                                class="form-control" placeholder="Confirm your password" required>
+                            <button type="button" class="btn btn-outline-secondary toggle-password"
+                                id="toggleConfirmPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
-                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
-                        placeholder="Confirm your password" required>
-                    <button type="button" class="btn btn-outline-secondary toggle-password" id="toggleConfirmPassword">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+                    <div class="text-end mt-2">
+                        <a href="/login">Sudah Reset Password !</a>
+                    </div>
+                </form>
             </div>
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary w-100">Reset Password</button>
-            <div class="text-end mt-2">
-                <a href="/login">Sudah Reset Password !</a>
-            </div>
-        </form>
+        </div>
     </div>
     <script>
         document.querySelectorAll('.toggle-password').forEach(function (toggleButton) {

@@ -8,17 +8,34 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
             height: 100vh;
         }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
 
         .forgot-password-container {
             background-color: #ffffff;
@@ -112,48 +129,88 @@
 </head>
 
 <body>
-    <!-- Tampilkan Pesan Sukses -->
-    @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-    @endif
-
-    <!-- Tampilkan Pesan Error -->
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        @foreach ($errors->all() as $error)
-        <p>{{ $error }}</p>
-        @endforeach
-    </div>
-    @endif
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <div class="forgot-password-container">
-        <center><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gdNrKPyr4qIaNuam3hHx6AUZorfCJlUeKQ&s"
-                alt="" width="30%"></center>
-        <br>
-        <h1>Forgot Password</h1>
-        <form action="/forgot-password" method="POST" id="forgotPasswordForm">
-            @csrf
-            <div class="form-group">
-                <label for="email" class="sr-only">Masukkan Email Anda:</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                            <i class="fas fa-envelope"></i> <!-- Ikon email -->
-                        </span>
+    <div class="d-flex flex-column justify-content-center w-100 h-100">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div class="forgot-password-container" style="max-width: 400px;">
+                <center><img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gdNrKPyr4qIaNuam3hHx6AUZorfCJlUeKQ&s"
+                        alt="" width="30%"></center>
+                <br>
+                <h1>Forgot Password</h1>
+                <form action="/forgot-password" method="POST" id="forgotPasswordForm">
+                    @csrf
+                    <div class="form-group">
+                        <label for="email" class="sr-only">Masukkan Email Anda:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-envelope"></i> <!-- Ikon email -->
+                                </span>
+                            </div>
+                            <input type="email" name="email" id="email" class="form-control"
+                                placeholder="Masukkan email yang terdaftar" required>
+                        </div>
                     </div>
-                    <input type="email" name="email" id="email" class="form-control"
-                        placeholder="Masukkan email yang terdaftar" required>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
-            <div class="text-end mt-2 ">
-                <a href="/login">Sudah Forgot Password !</a>
-            </div>
-        </form>
+                    <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
+                    <div class="text-end mt-2">
+                        <a href="/login">Sudah Forgot Password !</a>
+                    </div>
+                </form>
 
+                <!-- SweetAlert2 script -->
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                <script>
+                    document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
+                        e.preventDefault(); // Prevent the form from submitting the traditional way
+
+                        let email = document.getElementById('email').value;
+
+                        // Perform AJAX request to send the reset link
+                        fetch('/forgot-password', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({
+                                    email: email
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Display success alert
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sukses!',
+                                        text: data.success,
+                                        showConfirmButton: true
+                                    });
+                                } else {
+                                    // Display error alert
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: data.error || 'Terjadi kesalahan, coba lagi nanti.',
+                                        showConfirmButton: true
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                // Handle any network errors or unexpected issues
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Terjadi kesalahan jaringan. Coba lagi nanti.',
+                                    showConfirmButton: true
+                                });
+                            });
+                    });
+
+                </script>
+            </div>
+        </div>
     </div>
 </body>
 
